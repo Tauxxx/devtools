@@ -47,7 +47,7 @@ export default function PasswordGenerator() {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm space-y-4 transition-colors">
-        <div className="flex items-center justify-between gap-4">
+        <div className="items-stretch flex justify-between gap-4">
           <div className="flex-1 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border border-gray-200 dark:border-gray-700 font-mono text-xl break-all text-center min-h-[4rem] flex items-center justify-center text-gray-900 dark:text-gray-100 transition-colors">
             {password}
           </div>

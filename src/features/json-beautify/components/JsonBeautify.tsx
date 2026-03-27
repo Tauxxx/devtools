@@ -46,7 +46,7 @@ export default function JsonBeautify() {
               id="indent"
               value={indent}
               onChange={(e) => setIndent(Number(e.target.value))}
-              className="block w-20 rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 border p-1"
+              className="block w-24 rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 border p-1"
             >
               <option value={2}>2 Spaces</option>
               <option value={4}>4 Spaces</option>
@@ -83,7 +83,7 @@ export default function JsonBeautify() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between min-h-6">
             <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
               Input
             </h3>
@@ -98,7 +98,7 @@ export default function JsonBeautify() {
         </div>
 
         <div className="space-y-2">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between  min-h-6">
             <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
               Formatted Output
             </h3>
@@ -107,7 +107,11 @@ export default function JsonBeautify() {
               size="sm"
               onClick={() => copy(formatted)}
               disabled={!formatted || !!error}
-              className={copiedText ? "text-green-600 dark:text-green-400" : ""}
+              className={
+                copiedText
+                  ? "text-green-600 dark:text-green-400 m-0 p-0"
+                  : "h-6 py-0"
+              }
             >
               {copiedText ? (
                 <Check className="w-4 h-4 mr-2" />

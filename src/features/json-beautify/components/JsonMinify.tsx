@@ -75,7 +75,7 @@ export default function JsonMinify() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between min-h-6">
             <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
               Input
             </h3>
@@ -90,7 +90,7 @@ export default function JsonMinify() {
         </div>
 
         <div className="space-y-2">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between min-h-6">
             <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
               Minified Output
             </h3>
@@ -99,7 +99,11 @@ export default function JsonMinify() {
               size="sm"
               onClick={() => copy(formatted)}
               disabled={!formatted || !!error}
-              className={copiedText ? "text-green-600 dark:text-green-400" : ""}
+              className={
+                copiedText
+                  ? "h-6 py-0 text-green-600 dark:text-green-400"
+                  : "h-6 py-0 "
+              }
             >
               {copiedText ? (
                 <Check className="w-4 h-4 mr-2" />
