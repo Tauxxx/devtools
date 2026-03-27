@@ -1,9 +1,8 @@
 import { useState, useCallback } from "react";
-import { Copy, Check, Trash2, Globe, ArrowDownUp, Play } from "lucide-react";
-import Textarea from "../../../shared/components/Textarea/Textarea";
-import Button from "../../../shared/components/Button/Button";
+import { Globe } from "lucide-react";
 import { urlEncode, urlDecode } from "../utils/urlUtils";
-import { useCopyToClipboard } from "../../../shared/hooks/useCopyToClipboard";
+import TwoPaneEditor from "../../../shared/components/TwoPaneEditor/TwoPaneEditor";
+import Button from "../../../shared/components/Button/Button";
 
 const DEMO_DATA = "https://example.com/search?q=hello world & special symbols!";
 
@@ -11,7 +10,6 @@ export default function UrlEncoder() {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [encodeAll, setEncodeAll] = useState(true);
-  const { copiedText, copy } = useCopyToClipboard();
 
   const handleEncode = useCallback(() => {
     setOutput(urlEncode(input, encodeAll));
@@ -21,14 +19,10 @@ export default function UrlEncoder() {
     setOutput(urlDecode(input));
   }, [input]);
 
-  const handleClear = useCallback(() => {
-    setInput("");
-    setOutput("");
-  }, []);
-
   const handleSwap = useCallback(() => {
+    const oldInput = input;
     setInput(output);
-    setOutput(input);
+    setOutput(oldInput);
   }, [input, output]);
 
   const handleDemo = useCallback(() => {
@@ -36,119 +30,54 @@ export default function UrlEncoder() {
     setOutput("");
   }, []);
 
+  const leftControls = (
+    <label className="flex items-center gap-2 cursor-pointer">
+      <input
+        type="checkbox"
+        checked={encodeAll}
+        onChange={(e) => setEncodeAll(e.target.checked)}
+        className="w-4 h-4 text-blue-600 rounded border-gray-300 dark:border-gray-700 focus:ring-blue-500"
+      />
+      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        Encode all characters
+      </span>
+    </label>
+  );
+
+  const actionButtons = (
+    <>
+      <Button
+        variant="primary"
+        size="sm"
+        onClick={handleEncode}
+        disabled={!input}
+      >
+        Encode
+      </Button>
+      <Button
+        variant="secondary"
+        size="sm"
+        onClick={handleDecode}
+        disabled={!input}
+      >
+        Decode
+      </Button>
+    </>
+  );
+
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm transition-colors">
-        <div className="flex items-center gap-4">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={encodeAll}
-              onChange={(e) => setEncodeAll(e.target.checked)}
-              className="w-4 h-4 text-blue-600 rounded border-gray-300 dark:border-gray-700 focus:ring-blue-500"
-            />
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Encode all characters
-            </span>
-          </label>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleDemo}
-            className="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/50"
-          >
-            <Play className="w-4 h-4 mr-2" />
-            Demo
-          </Button>
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={handleEncode}
-            disabled={!input}
-          >
-            Encode
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={handleDecode}
-            disabled={!input}
-          >
-            Decode
-          </Button>
-          <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1" />
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleSwap}
-            disabled={!output}
-          >
-            <ArrowDownUp className="w-4 h-4 mr-2" />
-            Swap
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleClear}
-            className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/50"
-          >
-            <Trash2 className="w-4 h-4 mr-2" />
-            Clear
-          </Button>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-            Input
-          </h3>
-          <Textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Paste URL or text here..."
-            className="font-mono h-64"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-              Output
-            </h3>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => copy(output)}
-              disabled={!output}
-              className={copiedText ? "text-green-600 dark:text-green-400" : ""}
-            >
-              {copiedText ? (
-                <Check className="w-4 h-4 mr-2" />
-              ) : (
-                <Copy className="w-4 h-4 mr-2" />
-              )}
-              {copiedText ? "Copied" : "Copy"}
-            </Button>
-          </div>
-          <Textarea
-            value={output}
-            readOnly
-            placeholder="Result will appear here..."
-            className="font-mono h-64 bg-gray-50 dark:bg-gray-800/50"
-          />
-        </div>
-      </div>
-
-      {!input && (
-        <div className="flex flex-col items-center justify-center p-12 bg-gray-50 dark:bg-gray-800/50 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500">
-          <Globe className="w-12 h-12 mb-4 opacity-20" />
-          <p>Enter a URL/text or click Demo to encode/decode</p>
-        </div>
-      )}
-    </div>
+    <TwoPaneEditor
+      input={input}
+      onInputChange={setInput}
+      output={output}
+      onDemo={handleDemo}
+      onSwap={handleSwap}
+      leftControls={leftControls}
+      actionButtons={actionButtons}
+      inputPlaceholder="Paste URL or text here..."
+      inputHeight="h-64"
+      emptyStateIcon={Globe}
+      emptyStateTitle="Enter a URL/text or click Demo to encode/decode"
+    />
   );
 }
